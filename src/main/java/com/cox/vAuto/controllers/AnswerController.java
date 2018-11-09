@@ -86,7 +86,12 @@ public class AnswerController {
  //           CompletableFuture.allOf(dealerInfo).join();
         }
 
-
+       // https://spring.io/guides/gs/async-method/
+        //https://stackoverflow.com/questions/416183/in-java-critical-sections-what-should-i-synchronize-on
+//        public void foo() {
+//            synchronized (this) {
+//                // do something thread-safe
+//            }
               for (DealerIdModel dealer:listOfDealerId){
                   //Dealers dealersModels= new Dealers(dealer.getDealerId(),dealer.getName(), );
 //                  dealersModel.setDealerId(dealer.getDealerId());
