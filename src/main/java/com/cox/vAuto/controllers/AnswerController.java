@@ -26,6 +26,7 @@ public class AnswerController {
 
     private AnswerService answerService;
     public static List<DealerIdModel>ss;
+//    private Queue<CompletableFuture<DealerIdModel>> listOfDealerId;
 
     @Autowired
     public AnswerController(AnswerService answerService) {
@@ -43,13 +44,12 @@ public class AnswerController {
         VehicleInfoModel  vehicleInfoModel;
 
 
-        List <DealerIdModel> listOfDealerId = new ArrayList<>();
+        List <CompletableFuture<DealerIdModel>> listOfDealerId = new ArrayList<>();
         List<VehicleModel> listOfvehicles = new ArrayList<>();
 
         List<Dealers> dealersList=new ArrayList<>();
         Map<Integer, DealerIdModel> uniqueDealerListMap = new HashMap<>();
         Multimap<Integer, VehicleInfoModel> listMultimap = ArrayListMultimap.create();
-
 
 
         //get datasetId
@@ -62,29 +62,13 @@ public class AnswerController {
             //get vehicleinfo
             vehiclesInfo = answerService.getvehicleInfo(datasetId, vehicleIds.getVehicleIds().get(i));
             listOfvehicles.add(vehiclesInfo);
-          //  vehicleInfoModel = new VehicleInfoModel(vehiclesInfo.getVehicleId(), vehiclesInfo.getYear(), vehiclesInfo.getMake(), vehiclesInfo.getModel());
+            listOfDealerId.add(answerService.getdealerInfo(datasetId, vehiclesInfo.getDealerId()));
 
-
-            //get dealerInfo
-
-            try {
-                dealerInfo = answerService.getdealerInfo(datasetId, vehiclesInfo.getDealerId());
-           if (!listOfDealerId.contains(dealerInfo.get())){
-              listOfDealerId.add(dealerInfo.get());
-               }
-               } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            //add to multimap and save DealerName to  after each thread finishes
-//            try {
-//                listMultimap.put(dealerInfo.get().getDealerId(), vehicleInfoModel);
-//                if (!uniqueDealerListMap.containsKey(dealerInfo.get().getDealerId()))
-//                    uniqueDealerListMap.put(dealerInfo.get().getDealerId(), dealerInfo.get());
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            }
- //           CompletableFuture.allOf(dealerInfo).join();
         }
+
+//        CompletableFuture.allOf(listOfDealerId).join();
+        listOfDealerId.stream().map(CompletableFuture::join).collect(Collectors.toList());
+
 
        // https://spring.io/guides/gs/async-method/
         //https://stackoverflow.com/questions/416183/in-java-critical-sections-what-should-i-synchronize-on
@@ -92,17 +76,17 @@ public class AnswerController {
 //            synchronized (this) {
 //                // do something thread-safe
 //            }
-              for (DealerIdModel dealer:listOfDealerId){
-                  //Dealers dealersModels= new Dealers(dealer.getDealerId(),dealer.getName(), );
-//                  dealersModel.setDealerId(dealer.getDealerId());
-//                  dealersModel.setName(dealer.getName());
-//                  dealersModel.setVehicles(listOfvehicles.get());
-  //       List <VehicleInfoModel> s= listOfvehicles.stream().filter(p -> p.getDealerId().equals(dealer.getDealerId()).(Collectors.toList()));
-                          //toString()));
-
-                  Collection<VehicleModel> collection = new ArrayList<VehicleModel>(listOfvehicles);
-              List<VehicleModel> anotherLIST=       collection.stream().filter(p -> p.getDealerId()==dealer.getDealerId()).collect(Collectors.toList());
-              }
+//              for (DealerIdModel dealer:listOfDealerId){
+//                  //Dealers dealersModels= new Dealers(dealer.getDealerId(),dealer.getName(), );
+////                  dealersModel.setDealerId(dealer.getDealerId());
+////                  dealersModel.setName(dealer.getName());
+////                  dealersModel.setVehicles(listOfvehicles.get());
+//  //       List <VehicleInfoModel> s= listOfvehicles.stream().filter(p -> p.getDealerId().equals(dealer.getDealerId()).(Collectors.toList()));
+//                          //toString()));
+//
+//                  Collection<VehicleModel> collection = new ArrayList<VehicleModel>(listOfvehicles);
+//              List<VehicleModel> anotherLIST=       collection.stream().filter(p -> p.getDealerId()==dealer.getDealerId()).collect(Collectors.toList());
+//              }
 
 
         for(Map.Entry<Integer, DealerIdModel> entry : uniqueDealerListMap.entrySet()) {
