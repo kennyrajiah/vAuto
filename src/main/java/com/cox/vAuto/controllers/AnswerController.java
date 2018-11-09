@@ -25,6 +25,7 @@ import java.util.List;
 public class AnswerController {
 
     private AnswerService answerService;
+    public static List<DealerIdModel>ss;
 
     @Autowired
     public AnswerController(AnswerService answerService) {
