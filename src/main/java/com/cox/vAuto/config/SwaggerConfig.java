@@ -30,7 +30,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Swagger vAuto")
-                .description("This page lists all EndPoint to post answer to vAuto endPOint.")
+                .description("EndPoint for vAuto ")
                 .version("1.0-SNAPSHOT")
                 .build();
     }

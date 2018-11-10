@@ -26,7 +26,6 @@ public class AnswerController {
 
     private AnswerService answerService;
 
-
     @Autowired
     public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
@@ -36,7 +35,6 @@ public class AnswerController {
     public ResponseEntity<ResponseModel> getvAutoInfo() throws InterruptedException, ExecutionException {
 
         VehicleModel  vehiclesInfo;
-
         List <CompletableFuture<DealerIdModel>> listOfDealerId = new ArrayList<>();
         List<VehicleModel> listOfvehicles = new ArrayList<>();
 
@@ -52,7 +50,7 @@ public class AnswerController {
             listOfDealerId.add(answerService.getdealerInfo(datasetId, vehiclesInfo.getDealerId()));
 
         }
-
+         //wait for list to be completed.
         listOfDealerId.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
         // Build up multiMap
@@ -76,7 +74,7 @@ public class AnswerController {
                     vehicle.getModel()));
         }
 
-        List<Dealers> dealersList=new ArrayList<>();
+       // List<Dealers> dealersList=new ArrayList<>();
         Dealers dealersModel = null;
         for (CompletableFuture<DealerIdModel> dealerIdModel: listOfDealerId) {
             DealerIdModel dealersId = dealerIdModel.get();
