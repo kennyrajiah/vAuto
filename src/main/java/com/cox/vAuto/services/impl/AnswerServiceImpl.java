@@ -1,5 +1,6 @@
 package com.cox.vAuto.services.impl;
 
+import com.cox.vAuto.exception.NotFoundException;
 import com.cox.vAuto.models.*;
 import com.cox.vAuto.services.face.AnswerService;
 import org.springframework.scheduling.annotation.Async;
@@ -46,7 +47,7 @@ public class AnswerServiceImpl implements AnswerService {
         try {
             vehicleIds   = restTemplate.getForObject(uri,VehicleIdModel.class );
         }catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
-            throw new RuntimeException("Cannot Retrieve VehicleIds");
+            throw new NotFoundException("Cannot Retrieve VehicleIds");
         }
 
         return vehicleIds;
@@ -67,7 +68,7 @@ public class AnswerServiceImpl implements AnswerService {
 
 
         }catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
-            throw new RuntimeException("Cannot Retrieve VehicleInfo");
+            throw new NotFoundException("Cannot Retrieve VehicleInfo");
         }
 
         return vehicleInfo;
@@ -89,7 +90,7 @@ public class AnswerServiceImpl implements AnswerService {
             dealerInfo   = restTemplate.getForObject(uri,DealerIdModel.class );
 
         }catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
-            throw new RuntimeException("Cannot Retrieve VehicleInfo");
+            throw new NotFoundException("Cannot Retrieve VehicleInfo");
         }
 
         return CompletableFuture.completedFuture(dealerInfo);
@@ -108,7 +109,7 @@ public class AnswerServiceImpl implements AnswerService {
         try {
             response   = restTemplate.postForObject(uri,postAnswerModel,ResponseModel.class );
         }catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
-            throw new RuntimeException("Cannot verify VehicleInfo");
+            throw new NotFoundException("Cannot verify Answer");
         }
 
         return response;

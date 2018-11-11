@@ -16,6 +16,10 @@ public class Dealers {
         this.vehicles = vehicles;
     }
 
+    public Dealers() {
+
+    }
+
     public Integer getDealerId() {
         return dealerId;
     }

@@ -6,6 +6,14 @@ public class ResponseModel {
     private String message;
     private Integer totalMilliseconds;
 
+    public ResponseModel(Boolean success, String message, Integer totalMilliseconds) {
+        this.success = success;
+        this.message = message;
+        this.totalMilliseconds = totalMilliseconds;
+    }
+
+    public ResponseModel() {
+    }
 
     public Integer getTotalMilliseconds() {
         return totalMilliseconds;
