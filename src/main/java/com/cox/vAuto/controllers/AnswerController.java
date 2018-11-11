@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 import java.util.List;
 
 
-@Api(value = "Answer-Controller", description = "One Click run to return Success")
+@Api(value = "Answer-Controller", description = "One run to return Success")
 @RestController
 @RequestMapping("/api")
 public class AnswerController {
 
     private AnswerService answerService;
+
 
     @Autowired
     public AnswerController(AnswerService answerService) {
@@ -43,14 +44,18 @@ public class AnswerController {
         //get all vehicleIds
         VehicleIdModel vehicleIds=answerService.getvehicleIds(datasetId);
 
+        Set<Integer> seenDealers = new HashSet<>();
         for(int i=0;i<vehicleIds.getVehicleIds().size();i++) {
             //get vehicleinfo
             vehiclesInfo = answerService.getvehicleInfo(datasetId, vehicleIds.getVehicleIds().get(i));
             listOfvehicles.add(vehiclesInfo);
-            listOfDealerId.add(answerService.getdealerInfo(datasetId, vehiclesInfo.getDealerId()));
+            if (!seenDealers.contains(vehiclesInfo.getDealerId())) {
+                listOfDealerId.add(answerService.getdealerInfo(datasetId, vehiclesInfo.getDealerId()));
+                seenDealers.add(vehiclesInfo.getDealerId());
+            }
 
         }
-         //wait for list to be completed.
+        //wait for list to be completed.
         listOfDealerId.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
         // Build up multiMap
@@ -74,7 +79,7 @@ public class AnswerController {
                     vehicle.getModel()));
         }
 
-       // List<Dealers> dealersList=new ArrayList<>();
+        // List<Dealers> dealersList=new ArrayList<>();
         Dealers dealersModel = null;
         for (CompletableFuture<DealerIdModel> dealerIdModel: listOfDealerId) {
             DealerIdModel dealersId = dealerIdModel.get();
@@ -89,6 +94,5 @@ public class AnswerController {
 
         return new ResponseEntity<>(answerService.postAnswer(datasetId,postModel), HttpStatus.OK);
     }
-
 
 }

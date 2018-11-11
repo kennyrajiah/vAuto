@@ -8,6 +8,15 @@ public class VehicleModel {
     private String model;
     private Integer dealerId;
 
+    public VehicleModel() {}
+
+    public VehicleModel(Integer vehicleId, Integer year, String make, String model, Integer dealerId) {
+        this.vehicleId = vehicleId;
+        this.year = year;
+        this.make = make;
+        this.model = model;
+        this.dealerId = dealerId;
+    }
 
     public Integer getVehicleId() {
         return vehicleId;

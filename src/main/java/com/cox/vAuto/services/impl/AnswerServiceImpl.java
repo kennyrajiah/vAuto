@@ -28,7 +28,7 @@ public class AnswerServiceImpl implements AnswerService {
         try {
             datasetId = restTemplate.getForObject(uri, DatasetModel.class);
         }catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
-            throw new RuntimeException("Cannot Retrieve DatasetId");
+            throw new NotFoundException("Cannot Retrieve DatasetId");
         }
 
         return datasetId.getDatasetId().toString();
