@@ -52,7 +52,7 @@ public class AnswerController {
             if (!seenDealers.contains(vehiclesInfo.getDealerId())) {
                 listOfDealerId.add(answerService.getdealerInfo(datasetId, vehiclesInfo.getDealerId()));
                 seenDealers.add(vehiclesInfo.getDealerId());
-            }
+           }
 
         }
         //wait for list to be completed.
@@ -79,7 +79,7 @@ public class AnswerController {
                     vehicle.getModel()));
         }
 
-        // List<Dealers> dealersList=new ArrayList<>();
+
         Dealers dealersModel = null;
         for (CompletableFuture<DealerIdModel> dealerIdModel: listOfDealerId) {
             DealerIdModel dealersId = dealerIdModel.get();
